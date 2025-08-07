@@ -1,37 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Speed Typing Test App
+
+A mobile-optimized typing speed test application built with Next.js, React, and TypeScript.
+
+## Features
+
+- 🚀 **Mobile-First Design** - Optimized for mobile keyboards and touch interfaces
+- 🎯 **Real-time WPM Tracking** - Calculate words per minute as you type
+- 📊 **Accuracy Measurement** - Track typing accuracy with character-by-character comparison
+- 🎲 **Random Text Generation** - Dynamic content for varied typing challenges
+- 🎨 **Modern UI** - Glassmorphism design with smooth animations
+- 📱 **PWA Ready** - Installable as a mobile app
+- ♿ **Accessibility** - Screen reader support and keyboard navigation
+
+## Tech Stack
+
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **React 19** - Latest React features
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd speedapp
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Vercel (Recommended)
 
-## Learn More
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Deploy automatically
 
-To learn more about Next.js, take a look at the following resources:
+### Manual Build
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Troubleshooting 404 Errors
 
-## Deploy on Vercel
+If you're getting 404 errors when deployed:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Check build output**:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# speed-test-
+```bash
+npm run build
+```
+
+2. **Verify all files exist**:
+
+   - Ensure `app/page.tsx` exists
+   - Check that `app/layout.tsx` is present
+   - Verify `public/manifest.json` is valid
+
+3. **Clear cache and rebuild**:
+
+```bash
+rm -rf .next
+npm run build
+```
+
+4. **Check deployment platform settings**:
+   - Ensure Node.js version is 18+
+   - Verify build command is `npm run build`
+   - Check that output directory is `.next`
+
+## Mobile Keyboard Optimizations
+
+- **16px font size** prevents iOS zoom
+- **Touch-friendly buttons** (48px minimum)
+- **Keyboard detection** with dynamic layout
+- **Safe area support** for notched devices
+- **Orientation handling** for landscape/portrait
+
+## Usage
+
+1. Click "Start Test" to begin
+2. Type the displayed text exactly
+3. View your WPM and accuracy results
+4. Click "New Text" for a different challenge
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT License - see LICENSE file for details

@@ -1,0 +1,31 @@
+{
+  "name": "Speed Typing Test",
+  "short_name": "Speed Typing",
+  "description": "Test your typing speed on mobile devices with real-time WPM and accuracy tracking",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e1b4b",
+  "theme_color": "#1e1b4b",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["productivity", "education", "utilities"],
+  "icons": [
+    {
+      "src": "/next.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Start New Test",
+      "short_name": "New Test",
+      "description": "Start a new typing speed test",
+      "url": "/?action=new-test"
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": []
+} 
