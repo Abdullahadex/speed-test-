@@ -108,10 +108,10 @@ export default function TypingSpeedTest() {
   const [currentText, setCurrentText] = useState('');
   const [userInput, setUserInput] = useState('');
   const [isTestActive, setIsTestActive] = useState(false);
-  const [timeElapsed, setTimeElapsed] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(60); // 60 seconds countdown
   const [results, setResults] = useState<TypingResult | null>(null);
   const [testStarted, setTestStarted] = useState(false);
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
@@ -125,11 +125,17 @@ export default function TypingSpeedTest() {
     setCurrentText(generateRandomText());
   }, []);
 
-  // Timer logic
+  // Countdown timer logic
   useEffect(() => {
-    if (isTestActive && testStarted) {
+    if (isTestActive && testStarted && timeRemaining > 0) {
       intervalRef.current = setInterval(() => {
-        setTimeElapsed(prev => prev + 0.1);
+        setTimeRemaining(prev => {
+          if (prev <= 0.1) {
+            endTest();
+            return 0;
+          }
+          return prev - 0.1;
+        });
       }, 100);
     } else {
       if (intervalRef.current) {
@@ -142,14 +148,7 @@ export default function TypingSpeedTest() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isTestActive, testStarted]);
-
-  // Check if test is complete
-  useEffect(() => {
-    if (userInput.length > 0 && userInput === currentText) {
-      endTest();
-    }
-  }, [userInput, currentText]);
+  }, [isTestActive, testStarted, timeRemaining]);
 
   // Mobile keyboard and orientation detection
   useEffect(() => {
@@ -193,10 +192,11 @@ export default function TypingSpeedTest() {
 
   const startTest = () => {
     setUserInput('');
-    setTimeElapsed(0);
+    setTimeRemaining(60); // Reset to 60 seconds
     setIsTestActive(true);
     setTestStarted(true);
     setResults(null);
+    setCurrentWordIndex(0);
     startTimeRef.current = Date.now();
   };
 
@@ -206,6 +206,7 @@ export default function TypingSpeedTest() {
     
     const words = currentText.split(' ').length;
     const userWords = userInput.split(' ').length;
+    const timeElapsed = 60 - timeRemaining; // Calculate elapsed time
     const minutes = timeElapsed / 60;
     const wpm = Math.round(userWords / minutes);
     
@@ -232,10 +233,11 @@ export default function TypingSpeedTest() {
 
   const resetTest = () => {
     setUserInput('');
-    setTimeElapsed(0);
+    setTimeRemaining(60);
     setIsTestActive(false);
     setTestStarted(false);
     setResults(null);
+    setCurrentWordIndex(0);
     setCurrentText(generateRandomText());
   };
 
@@ -252,6 +254,35 @@ export default function TypingSpeedTest() {
 
   const handleInputBlur = () => {
     setInputFocused(false);
+  };
+
+  // Function to render text with word highlighting
+  const renderTextWithHighlighting = () => {
+    const words = currentText.split(' ');
+    const userWords = userInput.split(' ');
+    
+    return words.map((word, index) => {
+      let className = 'text-white';
+      
+      if (index < userWords.length) {
+        if (userWords[index] === word) {
+          className = 'text-green-400 bg-green-400/20 px-1 rounded'; // Correct word
+        } else if (userWords[index] && userWords[index] !== word) {
+          className = 'text-red-400 bg-red-400/20 px-1 rounded'; // Incorrect word
+        }
+      } else if (index === userWords.length && isTestActive) {
+        className = 'text-yellow-400 bg-yellow-400/20 px-1 rounded'; // Current word
+      } else if (index === 0 && isTestActive && userWords.length === 0) {
+        className = 'text-yellow-400 bg-yellow-400/20 px-1 rounded'; // First word when test starts
+      }
+      
+      return (
+        <span key={index} className={className}>
+          {word}
+          {index < words.length - 1 ? ' ' : ''}
+        </span>
+      );
+    });
   };
 
   return (
@@ -291,26 +322,28 @@ export default function TypingSpeedTest() {
             </div>
           )}
 
-          {/* Timer Display - Compact when keyboard visible */}
+          {/* Timer Display - Countdown */}
           <div className={`backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-6 mb-6 mobile-optimized ${isKeyboardVisible && inputFocused ? 'p-3' : ''}`}>
             <div className="text-center">
               <div className={`font-mono font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent ${isKeyboardVisible && inputFocused ? 'text-2xl' : 'text-5xl'}`}>
-                {formatTime(timeElapsed)}
+                {formatTime(timeRemaining)}
               </div>
-              <div className="text-purple-200 text-sm mt-2 font-medium">Time Elapsed</div>
+              <div className="text-purple-200 text-sm mt-2 font-medium">
+                {isTestActive ? 'Time Remaining' : '60 Second Test'}
+              </div>
             </div>
           </div>
 
           {/* Test Area */}
           {!results && (
             <div className="backdrop-blur-xl bg-white/10 rounded-3xl border border-white/20 shadow-2xl p-6 mb-6 mobile-optimized">
-              {/* Text to Type - Compact when keyboard visible */}
+              {/* Text to Type - With word highlighting */}
               <div className={`mb-6 ${isKeyboardVisible && inputFocused ? 'mb-3' : ''}`}>
                 <label className="block text-sm font-semibold text-purple-200 mb-3">
                   Type this text:
                 </label>
-                <div className="backdrop-blur-sm bg-white/5 rounded-2xl p-4 text-white leading-relaxed border border-white/10 max-h-32 overflow-y-auto mobile-scroll">
-                  {currentText}
+                <div className="backdrop-blur-sm bg-white/5 rounded-2xl p-4 leading-relaxed border border-white/10 max-h-32 overflow-y-auto mobile-scroll">
+                  {renderTextWithHighlighting()}
                 </div>
               </div>
 
@@ -429,15 +462,15 @@ export default function TypingSpeedTest() {
               <ul className="text-sm text-purple-200 space-y-2">
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                  Click "Start Test" to begin
+                  Click "Start Test" to begin the 60-second timer
                 </li>
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                  Type the randomly generated text exactly
+                  Type the highlighted text - current word is yellow, correct words are green
                 </li>
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                  Your speed and accuracy will be calculated
+                  Test ends automatically after 60 seconds
                 </li>
                 <li className="flex items-start">
                   <span className="w-2 h-2 bg-purple-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -447,7 +480,7 @@ export default function TypingSpeedTest() {
             </div>
           )}
         </div>
-    </div>
+      </div>
     </>
   );
 }
