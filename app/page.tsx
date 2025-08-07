@@ -271,9 +271,7 @@ export default function TypingSpeedTest() {
           className = 'text-red-400 bg-red-400/20 px-1 rounded'; // Incorrect word
         }
       } else if (index === userWords.length && isTestActive) {
-        className = 'text-yellow-400 bg-yellow-400/20 px-1 rounded'; // Current word
-      } else if (index === 0 && isTestActive && userWords.length === 0) {
-        className = 'text-yellow-400 bg-yellow-400/20 px-1 rounded'; // First word when test starts
+        className = 'text-yellow-400 bg-yellow-400/20 px-1 rounded'; // Current word to type
       }
       
       return (
@@ -318,7 +316,8 @@ export default function TypingSpeedTest() {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-2">
                 Speed Typing
               </h1>
-              <p className="text-purple-200 text-lg">Test your typing speed on mobile</p>
+              <p className="text-purple-200 text-lg mb-2">Test your typing speed on mobile</p>
+              <p className="text-pink-300 text-sm italic">💕 Made with love for Rodeeyah 💕</p>
             </div>
           )}
 
