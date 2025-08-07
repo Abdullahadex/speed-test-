@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -15,8 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Mobile Typing Speed Test",
   description: "Test your typing speed on mobile devices with real-time WPM and accuracy tracking",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover",
-  themeColor: "#1e1b4b",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -33,6 +31,15 @@ export const metadata: Metadata = {
     "apple-mobile-web-app-status-bar-style": "default",
     "apple-mobile-web-app-title": "Speed Typing Test"
   }
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+  themeColor: "#1e1b4b"
 };
 
 export default function RootLayout({

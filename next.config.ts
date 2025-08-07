@@ -5,31 +5,6 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   experimental: {
     optimizePackageImports: ['react', 'react-dom']
-  },
-  images: {
-    unoptimized: true
-  },
-  // Ensure proper static file serving
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
-          }
-        ]
-      }
-    ];
   }
 };
 
